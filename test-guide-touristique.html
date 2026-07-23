@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test - Guide touristique</title>
+</head>
+<body>
+    <h1>Test du guide touristique (REST + LLM)</h1>
+
+    <label for="lieu">Ville ou pays :</label>
+    <input type="text" id="lieu" value="Nice">
+
+    <label for="nb">Nombre d'endroits :</label>
+    <input type="number" id="nb" value="2" min="1">
+
+    <button onclick="demanderGuide()">Demander</button>
+
+    <pre id="resultat"></pre>
+
+    <script>
+        function demanderGuide() {
+            const lieu = document.getElementById("lieu").value;
+            const nb = document.getElementById("nb").value;
+            const resultatElement = document.getElementById("resultat");
+
+            resultatElement.textContent = "Chargement...";
+
+            // Remplacez <context-path> par le context-path de votre application
+            const url = "http://localhost:8081/tp3-guide-touristique-caleb-toussaint-1.0-SNAPSHOT/api/guide/lieu/"
+                        + encodeURIComponent(lieu) + "?nb=" + encodeURIComponent(nb);
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    resultatElement.textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    resultatElement.textContent = "Erreur : " + error;
+                });
+        }
+    </script>
+</body>
+</html>
