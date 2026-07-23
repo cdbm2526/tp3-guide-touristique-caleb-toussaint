@@ -3,6 +3,7 @@ package ht.mbds.calebtoussaint.tp3guidetouristiquecalebtoussaint.llm;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
+import dev.langchain4j.service.Result;
 import jakarta.enterprise.context.Dependent;
 
 import java.io.Serializable;
@@ -37,13 +38,19 @@ public class LlmClientForGuideTouristique implements Serializable {
     }
 
     /**
-     * Envoie une demande d'informations touristiques au LLM et retourne sa reponse.
+     * Envoie une demande d'informations touristiques au LLM et retourne le resultat
+     * complet, avec les informations structurees et l'usage de tokens.
      *
      * @param villeOuPays le nom de la ville ou du pays
      * @param nb le nombre d'endroits a visiter souhaite
-     * @return la reponse du LLM au format JSON
+     * @return le resultat structure, avec les metadonnees d'usage
      */
-    public String obtenirInfosTouristiques(String villeOuPays, int nb) {
-        return this.guideTouristique.guide(villeOuPays, nb);
+    public InfosTouristiquesAvecUsage obtenirInfosTouristiques(String villeOuPays, int nb) {
+        Result<InfosTouristiques> result = this.guideTouristique.guide(villeOuPays, nb);
+
+        InfosTouristiques infos = result.content();
+        TokenUsageDto usageDto = TokenUsageDto.from(result.tokenUsage());
+
+        return InfosTouristiquesAvecUsage.from(infos, usageDto);
     }
 }

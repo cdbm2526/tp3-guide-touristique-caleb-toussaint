@@ -1,5 +1,6 @@
 package ht.mbds.calebtoussaint.tp3guidetouristiquecalebtoussaint.llm;
 
+import dev.langchain4j.service.Result;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.V;
@@ -7,7 +8,7 @@ import dev.langchain4j.service.V;
 /**
  * Service IA qui joue le role d'un guide touristique. Il fournit des
  * informations touristiques (endroits a visiter, prix moyen d'un repas)
- * pour une ville ou un pays donne, au format JSON.
+ * pour une ville ou un pays donne.
  */
 public interface GuideTouristique {
 
@@ -16,19 +17,14 @@ public interface GuideTouristique {
      *
      * @param villeOuPays le nom de la ville ou du pays
      * @param nb le nombre d'endroits a visiter souhaite
-     * @return la reponse du LLM au format JSON
+     * @return le resultat contenant les informations touristiques structurees,
+     *         ainsi que les metadonnees (usage de tokens, etc.)
      */
     @SystemMessage("""
             Tu es un guide touristique. Pour la ville ou le pays donne par l'utilisateur, \
             indique les {{nb}} principaux endroits a visiter, ainsi que le prix moyen d'un repas \
-            dans la devise du pays. Reponds uniquement avec du JSON, exactement dans ce format, \
-            sans aucun texte supplementaire et sans utiliser Markdown :
-            {
-              "ville_ou_pays": "nom de la ville ou du pays",
-              "endroits_a_visiter": ["endroit 1", "endroit 2", "..."],
-              "prix_moyen_repas": "<prix> <devise du pays>"
-            }
+            dans la devise du pays.
             """)
     @UserMessage("Le lieu est : {{villeOuPays}}")
-    String guide(@V("villeOuPays") String villeOuPays, @V("nb") int nb);
+    Result<InfosTouristiques> guide(@V("villeOuPays") String villeOuPays, @V("nb") int nb);
 }
