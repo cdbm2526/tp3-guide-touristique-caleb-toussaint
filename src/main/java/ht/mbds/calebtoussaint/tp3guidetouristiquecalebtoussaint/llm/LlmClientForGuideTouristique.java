@@ -40,9 +40,10 @@ public class LlmClientForGuideTouristique implements Serializable {
      * Envoie une demande d'informations touristiques au LLM et retourne sa reponse.
      *
      * @param villeOuPays le nom de la ville ou du pays
+     * @param nb le nombre d'endroits a visiter souhaite
      * @return la reponse du LLM au format JSON
      */
-    public String obtenirInfosTouristiques(String villeOuPays) {
-        return this.guideTouristique.guide(villeOuPays);
+    public String obtenirInfosTouristiques(String villeOuPays, int nb) {
+        return this.guideTouristique.guide(villeOuPays, nb);
     }
 }

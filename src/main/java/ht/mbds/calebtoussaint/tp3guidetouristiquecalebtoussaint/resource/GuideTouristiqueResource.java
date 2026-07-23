@@ -2,10 +2,12 @@ package ht.mbds.calebtoussaint.tp3guidetouristiquecalebtoussaint.resource;
 
 import ht.mbds.calebtoussaint.tp3guidetouristiquecalebtoussaint.llm.LlmClientForGuideTouristique;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 /**
@@ -22,12 +24,14 @@ public class GuideTouristiqueResource {
      * Retourne des informations touristiques pour la ville ou le pays donne.
      *
      * @param villeOuPays le nom de la ville ou du pays sur lequel on veut des informations
+     * @param nb le nombre d'endroits a visiter souhaite (2 par defaut)
      * @return la reponse du LLM au format JSON (endroits a visiter, prix moyen d'un repas)
      */
     @GET
     @Path("lieu/{ville_ou_pays}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String endroitsDeVisite(@PathParam("ville_ou_pays") String villeOuPays) {
-        return llmClient.obtenirInfosTouristiques(villeOuPays);
+    public String endroitsDeVisite(@PathParam("ville_ou_pays") String villeOuPays,
+                                   @QueryParam("nb") @DefaultValue("2") int nb) {
+        return llmClient.obtenirInfosTouristiques(villeOuPays, nb);
     }
 }
